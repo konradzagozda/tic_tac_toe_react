@@ -49,3 +49,8 @@ ul {
 .game-info {
   margin-left: 20px;
 }
+
+.col_row_info {
+  display: inline;
+  margin: 10px;
+}
