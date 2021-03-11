@@ -43,6 +43,19 @@ class Board extends React.Component {
   }
 }
 
+class ColRowInfo extends React.Component {
+  render() {
+    if (this.props.col == undefined || this.props.row == undefined) {
+      return <p className={this.props.className}></p>;
+    }
+    return (
+      <p
+        className={this.props.className}
+      >{`(${this.props.col}, ${this.props.row})`}</p>
+    );
+  }
+}
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -85,13 +98,14 @@ class Game extends React.Component {
   }
 
   render() {
+    console.log(this.state.stepNumber);
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move, arr) => {
       // calculate (col, row)
       let indexRes;
-      let col_row_message = <p className="col_row_info">{`(col, row)`}</p>;
+      let col, row;
       if (move > 0) {
         for (let i = 0; i < 9; i++) {
           if (step.squares[i] !== arr[move - 1].squares[i]) {
@@ -99,17 +113,15 @@ class Game extends React.Component {
             break;
           }
         }
-        const col = (indexRes % 3) + 1;
-        const row = ((indexRes / 3) >> 0) + 1;
-
-        col_row_message = <p className="col_row_info">{`(${col}, ${row})`}</p>;
+        col = (indexRes % 3) + 1;
+        row = ((indexRes / 3) >> 0) + 1;
       }
 
       const desc = move ? "Go to move #" + move : "Go to game start";
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
-          {col_row_message}
+          <ColRowInfo className="col_row_info" col={col} row={row} />
         </li>
       );
     });
